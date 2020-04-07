@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import './config';
 import configureStore from './store/configureStore';
+import SignIn from './containers/SignIn';
 
 const store = configureStore();
 
@@ -12,6 +13,7 @@ const Root = () => (
     <BrowserRouter>
       <div>
         <Switch>
+        <Route path="/signin" component={SignIn} />
         </Switch>
       </div>
     </BrowserRouter>
