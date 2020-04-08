@@ -4,7 +4,7 @@
   "description": "fresherClient",
   "main": "index.html",
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.dev.js",
+    "start": "webpack-dev-server --config ./webpack.dev.js --open",
     "storybook": "start-storybook -p 6006 -c .storybook",
     "server": "http-server -g",
     "test": "mocha  --require  babel-register",
@@ -68,8 +68,8 @@
     "stylelint": "^9.10.1",
     "stylelint-config-standard": "^18.2.0",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.2.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^4.2.1"
   }
 }
