@@ -4,4 +4,6 @@ export function signIn(user) {
   return api.post('http://127.0.0.1:8000/api/login', user);
 }
 
-export function foo() {}
+export function getMe() {
+  return api.get('http://127.0.0.1:8000/api/me');
+}

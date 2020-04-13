@@ -5,6 +5,8 @@ import { Provider } from 'react-redux';
 import './config';
 import configureStore from './store/configureStore';
 import SignIn from './containers/SignIn';
+import PrivateRoute from './PrivateRoute';
+import Home from './containers/Home';
 
 const store = configureStore();
 
@@ -13,7 +15,8 @@ const Root = () => (
     <BrowserRouter>
       <div>
         <Switch>
-        <Route path="/signin" component={SignIn} />
+          <Route path="/signin" component={SignIn} />
+          <PrivateRoute path="/" component={Home} />
         </Switch>
       </div>
     </BrowserRouter>
