@@ -8,6 +8,7 @@ import SignIn from './containers/SignIn';
 import PrivateRoute from './PrivateRoute';
 import Home from './containers/Home';
 import Lesson from './containers/Lesson';
+import { NotificationContainer } from 'react-notifications';
 
 const store = configureStore();
 
@@ -22,6 +23,7 @@ const Root = () => (
         </Switch>
       </div>
     </BrowserRouter>
+    <NotificationContainer />
   </Provider>
 );
 
