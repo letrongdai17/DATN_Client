@@ -7,6 +7,7 @@ import configureStore from './store/configureStore';
 import SignIn from './containers/SignIn';
 import PrivateRoute from './PrivateRoute';
 import Home from './containers/Home';
+import Lesson from './containers/Lesson';
 
 const store = configureStore();
 
@@ -16,6 +17,7 @@ const Root = () => (
       <div>
         <Switch>
           <Route path="/signin" component={SignIn} />
+          <Route path="/classes/:id/lessons" component={Lesson} />
           <PrivateRoute path="/" component={Home} />
         </Switch>
       </div>

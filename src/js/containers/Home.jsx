@@ -27,29 +27,26 @@ const renderThead = () => (
   </thead>
 );
 
-const renderClassesTable = (data) => {
-  return (
-    <table className="table">
-      {renderThead()}
-      <tbody>
-        {renderTbody(data)}
-      </tbody>
-    </table>
-  );
-}
-
 class Home extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
     };
+
+    this.redirectToClassDetail = this.redirectToClassDetail.bind(this);
   }
 
   componentDidMount() {
     const { actions } = this.props;
     actions.classes.fetchClassesData(() => {}, () => {});
     actions.auth.getMe(() => {}, () => {});
+  }
+
+  redirectToClassDetail(id) {
+    const { history } = this.props;
+
+    history.push(`/classes/${id}/lessons`);
   }
 
   renderAccount() {
@@ -94,7 +91,11 @@ class Home extends Component {
       <tr key={item.id}>
         <th scope="row">{index + 1}</th>
         <td>
-          <Link href="">{item.subject_name || ''}</Link>
+          <Link
+            onClick={() => this.redirectToClassDetail(item.id)}
+          >
+            {item.subject_name || ''}
+          </Link>
         </td>
         <td>{item.subject_code || ''}</td>
         <td>{item.class_code || ''}</td>
@@ -157,6 +158,7 @@ function mapDispatchToProps(dispatch) {
 Home.propTypes = {
   actions: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export default connect(
