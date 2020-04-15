@@ -6,7 +6,6 @@ class Account extends Component {
   }
 
   render() {
-    console.log('user: ', this.props.user);
     return (
       <div>Account</div>
     );

@@ -62,7 +62,6 @@ class SignIn extends Component {
   }
 
   onSuccess() {
-    console.log('')
     const { history } = this.props;
     history.push('/');
   }
@@ -99,7 +98,6 @@ class SignIn extends Component {
     }
 
     if (email.error.length != 0 || password.error.length != 0) {
-      console.log(email);
       this.setErrors();
     } else {
       signIn(user, this.onSuccess, this.onError)
