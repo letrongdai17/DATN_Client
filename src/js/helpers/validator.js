@@ -34,7 +34,6 @@ function validateMinLength(value, minLength) {
 
 export function getValidateErrors(value, validateTypes) {
   const errors = [];
-  console.log(validateTypes)
 
   validateTypes.forEach(type => {
     switch(type) {
