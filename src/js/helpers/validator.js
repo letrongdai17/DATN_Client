@@ -8,7 +8,7 @@ const messages = {
 }
 
 function validateRequired(input) {
-  if (validator.isEmpty(input)) {
+  if (!input || validator.isEmpty(input)) {
     return messages.required;
   }
   return '';

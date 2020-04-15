@@ -5,6 +5,9 @@ import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import * as lessonActions from '../actions/lesson';
 import styled from 'styled-components';
+import LessonCreate from '../components/lesson/LessonCreate';
+import { convertToUTCTime } from '../helpers/utils';
+import { NotificationManager} from 'react-notifications';
 
 const renderThead = () => (
   <thead className="thead-dark">
@@ -31,20 +34,61 @@ const CreateIcon = styled.span`
 class Lesson extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isOpen: false,
+    };
+
+    this.openModal = this.openModal.bind(this);
+    this.onSuccess = this.onSuccess.bind(this);
+    this.onError = this.onError.bind(this);
+    this.createLesson = this.createLesson.bind(this);
   }
 
   componentDidMount() {
+    this.fetchLessons();
+  }
+
+  onSuccess() {
+    this.setState({ isOpen: false });
+  }
+
+  onError(err) {
+    let errorMessage = '';
+    try {
+      const { data } = err.response;
+      errorMessage = data.error;
+    } catch (e) {
+      errorMessage = 'Lỗi server';
+    } finally {
+      NotificationManager.error(errorMessage, 'Lỗi', 3000);
+    }
+  }
+
+  fetchLessons() {
     const { actions, match } = this.props;
     const { id } = match.params;
     actions.lesson.fetchLessons(id, () => {}, () => {});
   }
 
+  openModal() {
+    const { isOpen } = this.state;
+    this.setState({ isOpen: !isOpen });
+  }
+
+  createLesson(startTime, endTime) {
+    const { actions, match } = this.props;
+    const { id } = match.params;
+
+    const start = convertToUTCTime(startTime);
+    const end = convertToUTCTime(endTime);
+    actions.lesson.createLesson(id, start, end, this.onSuccess, this.onError);
+  }
+
   renderTopBar() {
     return (
       <TopBar>
-        <button type="button" className="btn btn-primary">
-          <CreateIcon><i class="fas fa-plus-circle" /></CreateIcon>
+        <button type="button" className="btn btn-primary" onClick={this.openModal}>
+          <CreateIcon><i className="fas fa-plus-circle" /></CreateIcon>
           Tạo tiết học
         </button>
       </TopBar>
@@ -85,10 +129,16 @@ class Lesson extends Component {
   }
 
   render() {
+    const { isOpen } = this.state;
     return (
       <div className="container">
         {this.renderTopBar()}
         {this.renderLessonsTable()}
+        <LessonCreate
+          isOpen={isOpen}
+          toggle={this.openModal}
+          createLesson={this.createLesson}
+        />
       </div>
     );
   }
