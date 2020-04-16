@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import * as lessonActions from '../actions/lesson';
 import styled from 'styled-components';
 import LessonCreate from '../components/lesson/LessonCreate';
-import { convertToUTCTime } from '../helpers/utils';
+import { convertToUTCTime, convertToLocalTime } from '../helpers/utils';
 import { NotificationManager} from 'react-notifications';
 
 const renderThead = () => (
@@ -16,6 +16,7 @@ const renderThead = () => (
       <th scope="col">Ngày</th>
       <th scope="col">Giờ bắt đầu</th>
       <th scope="col">Giờ kết thúc</th>
+      <th />
       <th />
     </tr>
   </thead>
@@ -42,6 +43,7 @@ class Lesson extends Component {
     this.onSuccess = this.onSuccess.bind(this);
     this.onError = this.onError.bind(this);
     this.createLesson = this.createLesson.bind(this);
+    this.redirectToQRCodeScreen = this.redirectToQRCodeScreen.bind(this);
   }
 
   componentDidMount() {
@@ -50,6 +52,7 @@ class Lesson extends Component {
 
   onSuccess() {
     this.setState({ isOpen: false });
+    this.fetchLessons();
   }
 
   onError(err) {
@@ -84,6 +87,12 @@ class Lesson extends Component {
     actions.lesson.createLesson(id, start, end, this.onSuccess, this.onError);
   }
 
+  redirectToQRCodeScreen() {
+    const { history, match } = this.props;
+    const { id } = match.params;
+    history.push(`/${id}/qr-code`);
+  }
+
   renderTopBar() {
     return (
       <TopBar>
@@ -106,15 +115,34 @@ class Lesson extends Component {
       );
     }
 
-    return lesson.data.map((item, index) => (
-      <tr key={item.id}>
-        <td>{index + 1}</td>
-        <td>{dayjs(item.start_time).format('DD/MM/YYYY')}</td>
-        <td>{dayjs(item.start_time).format('HH:mm:ss')}</td>
-        <td>{dayjs(item.end_time).format('HH:mm:ss')}</td>
-        <td>Chi tiết</td>
-      </tr>
-    ));
+    return lesson.data.map((item, index) => {
+      const start = convertToLocalTime(item.start_time);
+      const end = convertToLocalTime(item.end_time);
+      const isInLessonTime = new Date(start).getTime() < new Date().getTime()
+        && new Date().getTime() < new Date(end).getTime();
+
+      return (
+        <tr key={item.id}>
+          <td>{index + 1}</td>
+          <td>{dayjs(start).format('DD/MM/YYYY')}</td>
+          <td>{dayjs(start).format('HH:mm:ss')}</td>
+          <td>{dayjs(end).format('HH:mm:ss')}</td>
+          <td><button type="button" class="btn btn-info">Chi tiết</button></td>
+          <td>
+            {
+              isInLessonTime
+                ? <button
+                    type="button"
+                    class="btn btn-primary"
+                    onClick={this.redirectToQRCodeScreen}
+                  >Tạo QR Code</button>
+                : null
+            }
+          </td>
+        </tr>
+      );
+    }
+    );
   }
 
   renderLessonsTable() {
