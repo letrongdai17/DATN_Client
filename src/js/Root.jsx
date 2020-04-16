@@ -8,6 +8,8 @@ import SignIn from './containers/SignIn';
 import PrivateRoute from './PrivateRoute';
 import Home from './containers/Home';
 import Lesson from './containers/Lesson';
+import LessonQRCode from './containers/LessonQRCode';
+import RollUp from './containers/RollUp';
 import { NotificationContainer } from 'react-notifications';
 
 const store = configureStore();
@@ -19,6 +21,8 @@ const Root = () => (
         <Switch>
           <Route path="/signin" component={SignIn} />
           <Route path="/classes/:id/lessons" component={Lesson} />
+          <PrivateRoute path="/:lessonId/qr-code" component={LessonQRCode} />
+          <PrivateRoute path="/:lessonId/roll-up" component={RollUp} />
           <PrivateRoute path="/" component={Home} />
         </Switch>
       </div>

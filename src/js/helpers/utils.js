@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
 import moment from 'moment';
 
-export function convertToLocalTime(datetime, format = 'HH:mm:ss DD/MM/YYYY') {
+export function convertToLocalTime(datetime, format = 'YYYY/MM/DD HH:mm:ss') {
   const d = new Date();
-  const timezoneOffset = d.getTimezoneOffset();
+  const timezoneOffset = d.getTimezoneOffset() * (-1);
 
   if (!datetime) {
     return 'Datetime is invalid';
