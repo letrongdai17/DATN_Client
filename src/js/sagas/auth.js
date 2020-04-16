@@ -7,7 +7,7 @@ import {
 import * as authServices from '../services/auth';
 import { setMe } from '../actions/auth';
 import { AUTH_SIGN_IN, AUTH_GET_ME } from '../constants/auth';
-import { setToken } from '../helpers/storage';
+import { setToken } from '../helpers/api';
 
 /**
  * @export

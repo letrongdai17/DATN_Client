@@ -53,21 +53,10 @@ class SignIn extends Component {
     this.redirectToRegisterForm = this.redirectToRegisterForm.bind(this);
     this.redirectToResetPasswordForm = this.redirectToResetPasswordForm.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
-    this.onSuccess = this.onSuccess.bind(this);
-    this.onError = this.onError.bind(this);
   }
 
   componentDidMount() {
     clearToken();
-  }
-
-  onSuccess() {
-    const { history } = this.props;
-    history.push('/');
-  }
-
-  onError() {
-
   }
 
   setErrors() {
@@ -100,7 +89,7 @@ class SignIn extends Component {
     if (email.error.length != 0 || password.error.length != 0) {
       this.setErrors();
     } else {
-      signIn(user, this.onSuccess, this.onError)
+      signIn(user, this.props.onSuccess, this.props.onError)
     }
   }
 
@@ -206,6 +195,8 @@ class SignIn extends Component {
 SignIn.propTypes = {
   signIn: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
+  onSuccess: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 export default SignIn;

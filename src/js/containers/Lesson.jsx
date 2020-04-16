@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import * as lessonActions from '../actions/lesson';
+import * as authActions from '../actions/auth';
 import styled from 'styled-components';
 import LessonCreate from '../components/lesson/LessonCreate';
 import { convertToUTCTime, convertToLocalTime } from '../helpers/utils';
 import { NotificationManager} from 'react-notifications';
+import Header from '../components/common/Header';
 
 const renderThead = () => (
   <thead className="thead-dark">
@@ -127,13 +129,13 @@ class Lesson extends Component {
           <td>{dayjs(start).format('DD/MM/YYYY')}</td>
           <td>{dayjs(start).format('HH:mm:ss')}</td>
           <td>{dayjs(end).format('HH:mm:ss')}</td>
-          <td><button type="button" class="btn btn-info">Chi tiết</button></td>
+          <td><button type="button" className="btn btn-info">Chi tiết</button></td>
           <td>
             {
               isInLessonTime
                 ? <button
                     type="button"
-                    class="btn btn-primary"
+                    className="btn btn-primary"
                     onClick={this.redirectToQRCodeScreen}
                   >Tạo QR Code</button>
                 : null
@@ -158,8 +160,15 @@ class Lesson extends Component {
 
   render() {
     const { isOpen } = this.state;
+    const { data, actions } = this.props;
+
     return (
       <div className="container">
+        <Header
+          me={data.me}
+          logout={actions.auth.logout}
+          getMe={actions.auth.getMe}
+        />
         {this.renderTopBar()}
         {this.renderLessonsTable()}
         <LessonCreate
@@ -183,6 +192,7 @@ function mapStateToProps(state) {
   return {
     data: {
       lesson: state.lesson,
+      me: state.auth.me,
     },
   };
 }
@@ -191,6 +201,7 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: {
       lesson: bindActionCreators(lessonActions, dispatch),
+      auth: bindActionCreators(authActions, dispatch),
     },
   };
 }
