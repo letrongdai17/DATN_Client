@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import SignInComponent from '../components/auth/SignIn';
 import * as authActions from '../actions/auth';
+import { getToken } from '../helpers/storage';
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -22,6 +23,27 @@ const WrapperSignInComponent = styled.div`
 class SignIn extends Component {
   constructor(props) {
     super(props);
+
+    this.onSuccess = this.onSuccess.bind(this);
+    this.onError = this.onError.bind(this);
+  }
+
+  onSuccess() {
+    if (getToken()) {
+      this.props.history.push('/');
+    }
+  }
+
+  onError(err) {
+    let errorMessage = '';
+    try {
+      const { data } = err.response;
+      errorMessage = data.error;
+    } catch (e) {
+      errorMessage = 'Lỗi server';
+    } finally {
+      NotificationManager.error(errorMessage, 'Lỗi', 3000);
+    }
   }
 
   render() {
@@ -33,6 +55,8 @@ class SignIn extends Component {
           <SignInComponent
             signIn={actions.auth.signIn}
             history={history}
+            onSuccess={this.onSuccess}
+            onError={this.onError}
           />
         </WrapperSignInComponent>
       </Wrapper>
@@ -43,7 +67,7 @@ class SignIn extends Component {
 SignIn.propTypes = {
   data: PropTypes.objectOf(PropTypes.object).isRequired,
   actions: PropTypes.objectOf(PropTypes.object).isRequired,
-  history: PropTypes.objectOf(PropTypes.object).isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

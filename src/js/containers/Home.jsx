@@ -5,13 +5,14 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as authActions from '../actions/auth';
 import * as classesAction from '../actions/classes';
-import hustLogo from '../theme/imgs/hust_logo.png';
+import Header from '../components/common/Header';
 
 const Container = styled.div`
   margin-top: 20px;
 `;
 
-const Title = styled.div`
+const Title = styled.h3`
+  text-decoration: underline;
 `;
 
 const Link = styled.a``;
@@ -40,7 +41,6 @@ class Home extends Component {
   componentDidMount() {
     const { actions } = this.props;
     actions.classes.fetchClassesData(() => {}, () => {});
-    actions.auth.getMe(() => {}, () => {});
   }
 
   redirectToClassDetail(id) {
@@ -53,7 +53,8 @@ class Home extends Component {
     const { data } = this.props;
     const user = data.me;
     return (
-      <div>
+      <div className="mt-4">
+        <Title>Thông tin giáo viên</Title>
         <div className="row">
           <div className="col-3">
             <label>Email</label>
@@ -114,23 +115,19 @@ class Home extends Component {
     );
   }
 
-  renderClasses() {
-    const { data } = this.props;
-    
-    return (
-      <div>
-        <Title>Danh sách lớp giáo viên quản lý</Title>
-      </div>
-    );
-  }
-
   render() {
-    const { classes } = this.props.data;
+    const { classes, me } = this.props.data;
+    const { actions } = this.props;
 
     return (
       <Container className="container">
-        <img src={hustLogo} />
+        <Header
+          me={me}
+          logout={actions.auth.logout}
+          getMe={actions.auth.getMe}
+        />
         {this.renderAccount()}
+        <Title className="my-2">Danh sách lớp giáo viên quản lý</Title>
         {this.renderClassesTable(classes.data)}
       </Container>
     );
