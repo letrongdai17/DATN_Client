@@ -15,6 +15,7 @@ module.exports = {
 
   devServer: {
     contentBase: './public',
+    host: '192.168.0.103',
   },
 
   module: {

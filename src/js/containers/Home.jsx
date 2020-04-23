@@ -109,7 +109,7 @@ class Home extends Component {
       <table className="table">
         {renderThead()}
         <tbody>
-          {this.renderTbody(data)}
+          {this.renderTbody(data.data)}
         </tbody>
       </table>
     );

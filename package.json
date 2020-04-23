@@ -4,7 +4,7 @@
   "description": "fresherClient",
   "main": "index.html",
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.dev.js --open",
+    "start": "webpack-dev-server --config ./webpack.dev.js --open --host 192.168.0.103",
     "storybook": "start-storybook -p 6006 -c .storybook",
     "server": "http-server -g",
     "test": "mocha  --require  babel-register",

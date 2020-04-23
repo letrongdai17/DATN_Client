@@ -11,7 +11,8 @@ const lesson = (state = initState, action = {}) => {
   switch (action.type) {
     case LESSON_SET_DATA: {
       const result = { ...state };
-      result.data = action.data;
+      console.log(action.data)
+      result.data = action.data.data;
       return result;
     }
     case LESSON_DEFAULT:
