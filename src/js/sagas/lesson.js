@@ -5,8 +5,8 @@ import {
   fork,
 } from 'redux-saga/effects';
 import * as lessonServices from '../services/lesson';
-import { LESSON_FETCH_DATA, LESSON_CREATE } from '../constants/lesson';
-import { setLessons } from '../actions/lesson';
+import { LESSON_FETCH_DATA, LESSON_CREATE, FETCH_LESSON_STUDENTS_ROLLED_UP } from '../constants/lesson';
+import { setLessons, setLessonStudentsRolledUp } from '../actions/lesson';
 
 /**
  * @export
@@ -14,8 +14,9 @@ import { setLessons } from '../actions/lesson';
  */
 export function* fetchLessons(action) {
   try {
-    const result = yield call(lessonServices.fetchLessons, action.classId);
-    yield put(setLessons(result.data.data));
+    const { currentPage, perPage, classId } = action;
+    const result = yield call(lessonServices.fetchLessons, classId, currentPage, perPage);
+    yield put(setLessons(result.data));
 
     action.onSuccess();
   } catch (err) {
@@ -38,6 +39,16 @@ export function* createLesson(action) {
   }
 }
 
+export function* fetchLessonStudentsRolledUp(action) {
+  try {
+    const result = yield call(lessonServices.fetchLessonStudentsRolledUp, action.lessonId);
+    yield put(setLessonStudentsRolledUp(result.data));
+    action.onSuccess();
+  } catch (err) {
+    action.onError(err);
+  }
+}
+
 export function* watchFetchLessons() {
   yield takeLatest(LESSON_FETCH_DATA, fetchLessons);
 }
@@ -46,7 +57,12 @@ export function* watchCreateLesson() {
   yield takeLatest(LESSON_CREATE, createLesson);
 }
 
+export function* watchFetchLessonStudentsRolledUp() {
+  yield takeLatest(FETCH_LESSON_STUDENTS_ROLLED_UP, fetchLessonStudentsRolledUp);
+}
+
 export default function* lesson() {
   yield fork(watchFetchLessons);
   yield fork(watchCreateLesson);
+  yield fork(watchFetchLessonStudentsRolledUp);
 }

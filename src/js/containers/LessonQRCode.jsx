@@ -12,7 +12,7 @@ class LessonQRCode extends Component {
         <div>
           <QRCode
               id='qrcode'
-              value={`http://192.168.0.103:8080/${lessonId}/roll-up`}
+              value={`http://192.168.0.5:8080/${lessonId}/roll-up`}
               size={290}
               level={'H'}
               includeMargin={true}

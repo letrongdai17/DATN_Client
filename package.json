@@ -4,7 +4,7 @@
   "description": "fresherClient",
   "main": "index.html",
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.dev.js --open --host 192.168.0.103",
+    "start": "webpack-dev-server --config ./webpack.dev.js --open --host 192.168.0.5",
     "storybook": "start-storybook -p 6006 -c .storybook",
     "server": "http-server -g",
     "test": "mocha  --require  babel-register",
@@ -30,6 +30,7 @@
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "qrcode.react": "^1.0.0",
+    "rc-pagination": "^2.2.0",
     "react": "^16.9.0",
     "react-datepicker": "^2.8.0",
     "react-dom": "^16.9.0",

@@ -1,10 +1,16 @@
 import {
-  LESSON_FETCH_DATA, LESSON_SET_DATA, LESSON_CREATE,
+  LESSON_FETCH_DATA,
+  LESSON_SET_DATA,
+  LESSON_CREATE,
+  FETCH_LESSON_STUDENTS_ROLLED_UP,
+  SET_LESSON_STUDENTS_ROLLED_UP,
 } from '../constants/lesson';
 
-export const fetchLessons = (classId, onSuccess, onError) => ({
+export const fetchLessons = (classId, currentPage, perPage, onSuccess, onError) => ({
   type: LESSON_FETCH_DATA,
   classId,
+  currentPage,
+  perPage,
   onSuccess,
   onError,
 });
@@ -21,4 +27,16 @@ export const createLesson = (classId, startTime, endTime, onSuccess, onError) =>
   endTime,
   onSuccess,
   onError,
+});
+
+export const fetchLessonStudentsRolledUp = (lessonId, onSuccess, onError) => ({
+  type: FETCH_LESSON_STUDENTS_ROLLED_UP,
+  lessonId,
+  onSuccess,
+  onError,
+});
+
+export const setLessonStudentsRolledUp = (data) => ({
+  type: SET_LESSON_STUDENTS_ROLLED_UP,
+  data,
 });

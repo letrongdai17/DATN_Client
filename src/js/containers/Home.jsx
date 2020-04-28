@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import * as authActions from '../actions/auth';
 import * as classesAction from '../actions/classes';
 import Header from '../components/common/Header';
+import Pagination from 'rc-pagination';
 
 const Container = styled.div`
   margin-top: 20px;
@@ -24,6 +25,7 @@ const renderThead = () => (
       <th scope="col">Tên môn học</th>
       <th scope="col">Mã môn học</th>
       <th scope="col">Mã lớp</th>
+      <th scope="col"></th>
     </tr>
   </thead>
 );
@@ -33,20 +35,34 @@ class Home extends Component {
     super(props);
 
     this.state = {
+      currentPage: 1,
     };
 
     this.redirectToClassDetail = this.redirectToClassDetail.bind(this);
+    this.handleChangePage = this.handleChangePage.bind(this);
   }
 
   componentDidMount() {
-    const { actions } = this.props;
-    actions.classes.fetchClassesData(() => {}, () => {});
+    const { actions, data } = this.props;
+    const { currentPage, perPage } = data.classes;
+    actions.classes.fetchClassesData(currentPage, perPage, () => {}, () => {});
+  }
+
+  handleChangePage(page) {
+    const { actions, data } = this.props;
+    actions.classes.fetchClassesData(page, data.classes.perPage, () => {}, () => {});
   }
 
   redirectToClassDetail(id) {
     const { history } = this.props;
 
     history.push(`/classes/${id}/lessons`);
+  }
+
+  goToClassStudentsDetail(id) {
+    const { history } = this.props;
+
+    history.push(`/classes/${id}/students`);
   }
 
   renderAccount() {
@@ -100,6 +116,13 @@ class Home extends Component {
         </td>
         <td>{item.subject_code || ''}</td>
         <td>{item.class_code || ''}</td>
+        <td>
+          <button
+            type="button"
+            className="btn btn-info"
+            onClick={() => this.goToClassStudentsDetail(item.id)}
+          >Chi tiết</button>
+        </td>
       </tr>
       ));
   };
@@ -109,15 +132,15 @@ class Home extends Component {
       <table className="table">
         {renderThead()}
         <tbody>
-          {this.renderTbody(data.data)}
+          {this.renderTbody(data)}
         </tbody>
       </table>
     );
   }
 
   render() {
-    const { classes, me } = this.props.data;
-    const { actions } = this.props;
+    const { actions, data } = this.props;
+    const { classes, me } = data;
 
     return (
       <Container className="container">
@@ -129,6 +152,12 @@ class Home extends Component {
         {this.renderAccount()}
         <Title className="my-2">Danh sách lớp giáo viên quản lý</Title>
         {this.renderClassesTable(classes.data)}
+        <Pagination
+          current={classes.currentPage}
+          total={classes.total}
+          pageSize={classes.perPage}
+          onChange={this.handleChangePage}
+        />
       </Container>
     );
   }

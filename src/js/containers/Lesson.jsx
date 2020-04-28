@@ -10,6 +10,8 @@ import LessonCreate from '../components/lesson/LessonCreate';
 import { convertToUTCTime, convertToLocalTime } from '../helpers/utils';
 import { NotificationManager} from 'react-notifications';
 import Header from '../components/common/Header';
+import Pagination from 'rc-pagination';
+import { Link } from 'react-router-dom';
 
 const renderThead = () => (
   <thead className="thead-dark">
@@ -46,10 +48,15 @@ class Lesson extends Component {
     this.onError = this.onError.bind(this);
     this.createLesson = this.createLesson.bind(this);
     this.redirectToQRCodeScreen = this.redirectToQRCodeScreen.bind(this);
+    this.handleChangePage = this.handleChangePage.bind(this);
+    this.fetchLessons = this.fetchLessons.bind(this);
+    this.goToLessonStudentsDetail = this.goToLessonStudentsDetail.bind(this);
   }
 
   componentDidMount() {
-    this.fetchLessons();
+    const { match, data } = this.props;
+    const { id } = match.params;
+    this.fetchLessons(id, 1, data.lesson.perPage);
   }
 
   onSuccess() {
@@ -69,10 +76,21 @@ class Lesson extends Component {
     }
   }
 
-  fetchLessons() {
-    const { actions, match } = this.props;
+  fetchLessons(classId, currentPage, perPage) {
+    const { actions } = this.props;
+    actions.lesson.fetchLessons(
+      classId,
+      currentPage,
+      perPage,
+      () => {},
+      () => {},
+    );
+  }
+
+  handleChangePage(currentPage) {
+    const { match, data } = this.props;
     const { id } = match.params;
-    actions.lesson.fetchLessons(id, () => {}, () => {});
+    this.fetchLessons(id, currentPage, data.lesson.perPage);
   }
 
   openModal() {
@@ -93,6 +111,11 @@ class Lesson extends Component {
     const { history, match } = this.props;
     const { id } = match.params;
     history.push(`/${id}/qr-code`);
+  }
+
+  goToLessonStudentsDetail(id) {
+    const { history, match } = this.props;
+    history.replace(`lesson/${id}/students`);
   }
 
   renderTopBar() {
@@ -129,7 +152,16 @@ class Lesson extends Component {
           <td>{dayjs(start).format('DD/MM/YYYY')}</td>
           <td>{dayjs(start).format('HH:mm:ss')}</td>
           <td>{dayjs(end).format('HH:mm:ss')}</td>
-          <td><button type="button" className="btn btn-info">Chi tiết</button></td>
+          <td>
+            <button
+              type="button"
+              className="btn btn-info"
+            >
+              <Link to={`/lesson/${item.id}/students`}>
+                Chi tiết
+              </Link>
+            </button>
+          </td>
           <td>
             {
               isInLessonTime
@@ -148,6 +180,8 @@ class Lesson extends Component {
   }
 
   renderLessonsTable() {
+    const { data } = this.props;
+
     return (
       <table className="table">
         {renderThead()}
@@ -171,6 +205,12 @@ class Lesson extends Component {
         />
         {this.renderTopBar()}
         {this.renderLessonsTable()}
+        <Pagination
+          current={data.lesson.currentPage}
+          total={data.lesson.total}
+          pageSize={data.lesson.perPage}
+          onChange={this.handleChangePage}
+        />
         <LessonCreate
           isOpen={isOpen}
           toggle={this.openModal}
