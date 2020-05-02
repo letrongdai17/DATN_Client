@@ -5,8 +5,6 @@ import {
   Modal, ModalHeader, ModalBody, ModalFooter, Button
 } from 'reactstrap';
 import DatePicker from "react-datepicker";
-import { VALIDATE_TYPES } from '../../helpers/constants';
-import { getValidateErrors } from '../../helpers/validator';
 
 const WrapperDateTimeInput = styled.div`
   input {

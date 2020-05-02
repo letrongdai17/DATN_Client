@@ -22,9 +22,9 @@ const Root = () => (
       <div>
         <Switch>
           <Route path="/signin" component={SignIn} />
+          <Route path="/:lessonId/roll-up" component={RollUp} />
           <Route path="/classes/:id/lessons" component={Lesson} />
           <PrivateRoute path="/:lessonId/qr-code" component={LessonQRCode} />
-          <PrivateRoute path="/:lessonId/roll-up" component={RollUp} />
           <PrivateRoute path="/classes/:classId/students" component={ClassStudents} />
           <PrivateRoute path="/lesson/:lessonId/students" component={LessonStudents} />
           <PrivateRoute path="/" component={Home} />

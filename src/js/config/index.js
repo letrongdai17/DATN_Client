@@ -21,5 +21,8 @@ switch (process.env.APP_ENV) {
   }
 
   default:
-    break;
+    case 'development': {
+      module.exports = require('./dev');
+      break;
+    }
 }

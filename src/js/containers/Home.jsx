@@ -7,6 +7,7 @@ import * as authActions from '../actions/auth';
 import * as classesAction from '../actions/classes';
 import Header from '../components/common/Header';
 import Pagination from 'rc-pagination';
+import { deviceDetect } from 'react-device-detect';
 
 const Container = styled.div`
   margin-top: 20px;
@@ -46,6 +47,7 @@ class Home extends Component {
     const { actions, data } = this.props;
     const { currentPage, perPage } = data.classes;
     actions.classes.fetchClassesData(currentPage, perPage, () => {}, () => {});
+    console.log('asd', deviceDetect());
   }
 
   handleChangePage(page) {
