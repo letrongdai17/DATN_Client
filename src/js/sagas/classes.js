@@ -5,7 +5,11 @@ import {
   fork,
 } from 'redux-saga/effects';
 import * as classesServices from '../services/classes';
-import { CLASSES_FETCH_DATA, FETCH_CLASS_STUDENTS_ROLLED_UP } from '../constants/classes';
+import {
+  CLASSES_FETCH_DATA,
+  FETCH_CLASS_STUDENTS_ROLLED_UP,
+  FETCH_CLASS_STUDENTS_BY_LESSON_ID,
+} from '../constants/classes';
 import { setClassesData, setClassStudentsRolledUp } from '../actions/classes';
 
 /**
@@ -35,6 +39,17 @@ export function* fetchClassStudentsRolledUp(action) {
   }
 }
 
+export function* fetchClassStudentsByLessonId(action) {
+  try {
+    const { lessonId } = action;
+    const result = yield call(classesServices.fetchClassStudentsByLessonId, lessonId);
+    yield put(setClassStudentsRolledUp(result.data.data));
+    action.onSuccess();
+  } catch (error) {
+    action.onError();
+  }
+}
+
 export function* watchFetchClassesData() {
   yield takeLatest(CLASSES_FETCH_DATA, fetchClassesData);
 }
@@ -43,7 +58,12 @@ export function* watchFetchClassStudentsRolledUp() {
   yield takeLatest(FETCH_CLASS_STUDENTS_ROLLED_UP, fetchClassStudentsRolledUp);
 }
 
+export function* watchFetchClassStudentsByLessonId() {
+  yield takeLatest(FETCH_CLASS_STUDENTS_BY_LESSON_ID, fetchClassStudentsByLessonId);
+}
+
 export default function* classes() {
   yield fork(watchFetchClassesData);
   yield fork(watchFetchClassStudentsRolledUp);
+  yield fork(watchFetchClassStudentsByLessonId);
 }

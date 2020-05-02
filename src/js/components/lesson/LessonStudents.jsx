@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
   ThStyled, TdStyled, CheckIcon, WrapperCheckIcon,
+  TableScrollX,
 } from '../home/ClassStudents';
 import { convertToLocalTime } from '../../helpers/utils';
 
@@ -83,12 +84,12 @@ class ClassStudents extends Component {
     const { students } = this.props;
 
     return (
-      <table className="table">
+      <TableScrollX className="table">
         {renderThead()}
         <tbody>
           {renderStudentsData(students)}
         </tbody>
-      </table>
+      </TableScrollX>
     );
   }
 

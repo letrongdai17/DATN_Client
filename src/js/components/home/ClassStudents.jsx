@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { convertToLocalTime } from '../../helpers/utils';
 
-const TableScrollX = styled.table`
+export const TableScrollX = styled.table`
   display: inline-block;
   overflow-x: auto;
   width: 100%;
